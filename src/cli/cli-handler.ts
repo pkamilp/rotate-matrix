@@ -3,6 +3,7 @@ import { CsvReader } from "../csv/csv-reader";
 import { InvalidInputError } from "../errors/invalid-input.error";
 import { CsvWriter } from "../csv/csv-writer";
 import { csvReaderOptions, csvWriterOptions } from "../csv/config/config";
+import { MatrixRotate } from "../matrix/matrix-rotate";
 
 interface InputRow {
   id: string;
@@ -16,45 +17,36 @@ interface OutputRow {
 }
 
 export class CliHandler {
-  private writeStream!: CsvFormatterStream<InputRow, OutputRow>;
+  private writeStream: CsvFormatterStream<InputRow, OutputRow>;
+  private rotator: MatrixRotate;
 
-  rotateTable(filePath: string) {
-    const reader = new CsvReader();
-    const stream = reader.createStream(filePath, csvReaderOptions);
+  constructor() {
+    this.writeStream = new CsvWriter().createStream(csvWriterOptions);
+    this.rotator = new MatrixRotate();
+  }
 
-    const writer = new CsvWriter();
-    this.writeStream = writer.createStream(csvWriterOptions);
+  rotateTable(input: string, output: NodeJS.WritableStream = process.stdout) {
+    const readStream = new CsvReader().createStream(input, csvReaderOptions);
 
-    stream.on("data", (data) => this.handleOnData(data));
-    stream.on("error", (error) => this.handleOnError(error));
-    stream.on("end", () => this.handleOnEnd());
+    this.writeStream.pipe(output);
+
+    readStream.on("data", (data) => this.onInputStreamData(data));
+    readStream.on("end", () => this.onInputStreamEnd());
 
     return true;
   }
 
-  private handleOnData(data: Record<string, string>) {
+  private onInputStreamData(data: Record<string, string>) {
     if (!("id" in data) || !("json" in data)) {
       throw new InvalidInputError("Invalid input data " + JSON.stringify(data));
     }
 
-    const row = {
-      id: data.id,
-      data: JSON.parse(data.json),
-    };
+    const result = this.rotator.rotate(JSON.parse(data.json));
 
-    this.writeData(row.id, row.data, true);
+    this.writeStream.write({ id: data.id, json: JSON.stringify(result.rotated), is_valid: result.isValid });
   }
 
-  private handleOnError(error: unknown) {
-    // TODO add log message
-    this.handleOnEnd();
-  }
-
-  private handleOnEnd() {
+  private onInputStreamEnd() {
     this.writeStream.end();
-  }
-
-  private writeData(id: string, data: number[], isValid: boolean) {
-    this.writeStream.write({ id, json: data, is_valid: isValid });
   }
 }
