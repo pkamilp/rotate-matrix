@@ -9,7 +9,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["node_modules", "build"],
+  "ignorePatterns": ["node_modules", "build", "webpack.config.js"],
   "rules": {
     "no-console": "error",
     "import/prefer-default-export": "off",
