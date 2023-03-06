@@ -6,8 +6,9 @@
   "main": "cli.js",
   "scripts": {
     "build": "npx tsc -p tsconfig.build.json",
-    "cli": "ts-node --files src/cli.ts",
-    "test": "npx ts-mocha -p tsconfig.json \"./src/**/*.spec.ts\" \"./test/*.spec.ts\" --exit"
+    "lint": "npx eslint -c .eslintrc.json --ext .ts src/",
+    "test": "npx ts-mocha -p tsconfig.json \"./src/**/*.spec.ts\" --exit",
+    "cli": "ts-node --files src/cli.ts"
   },
   "engine": {
     "node": ">=18.0.0"

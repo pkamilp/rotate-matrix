@@ -3,7 +3,7 @@ import { CliHandler } from "./cli/cli-handler";
 
 program.argument("<filePath>", "file path").action((filePath) => {
   const handler = new CliHandler();
-  handler.readFile(filePath);
+  handler.rotateTable(filePath);
 });
 
 program.parse();
