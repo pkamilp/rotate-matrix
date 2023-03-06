@@ -8,7 +8,8 @@
     "build": "npx webpack",
     "lint": "npx eslint -c .eslintrc.json --ext .ts src/",
     "test": "npx ts-mocha -p tsconfig.json \"./src/**/*.spec.ts\" --exit",
-    "cli": "ts-node --files src/cli.ts"
+    "cli": "ts-node --files src/cli.ts",
+    "prepare": "husky install"
   },
   "engine": {
     "node": ">=18.0.0"
@@ -24,10 +25,11 @@
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "eslint": "^8.35.0",
-    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-unicorn": "^46.0.0",
+    "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "prettier": "^2.8.4",
     "ts-loader": "^9.4.2",
