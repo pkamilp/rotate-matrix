@@ -2,12 +2,12 @@
   "name": "rotate-table",
   "version": "0.0.1",
   "description": "Rotates csv table",
+  "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "test": "./node_modules/.bin/mocha -r ts-node/register \"./src/**/*.spec.ts\" --exit"
+    "build": "npx tsc -p tsconfig.build.json",
+    "test": "npx mocha -r ts-node/register \"./src/**/*.spec.ts\" --exit"
   },
-  "license": "ISC",
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.6",
