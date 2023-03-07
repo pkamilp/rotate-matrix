@@ -1,7 +1,7 @@
 {
-  "name": "rotate-table",
+  "name": "rotate-matrix",
   "version": "0.0.1",
-  "description": "Rotates csv table",
+  "description": "Rotates square matrix from csv file",
   "license": "ISC",
   "main": "cli.js",
   "scripts": {
