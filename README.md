@@ -40,10 +40,14 @@ npm run test
 ## Use
 After building package you can use it like
 ```
-node cli.js input.csv > output.csv
+node cli.js <input_file_path> > <output_file_path>
 ```
-The input file is the first and only argument to the program.
-Output is written to stdout
+The input file is the first and only argument to the program. Output is written to stdout
+
+**Example usage**
+```
+node cli.js fixtures/input.csv > output.csv
+```
 
 #### Example input.csv
 *json* is a flat array of numbers

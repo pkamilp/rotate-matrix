@@ -1,4 +1,4 @@
-export class InvalidInputError extends Error {
+export class InvalidCsvError extends Error {
   public constructor(message: string) {
     super(message);
 

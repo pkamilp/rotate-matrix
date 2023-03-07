@@ -17,13 +17,15 @@
   "dependencies": {
     "commander": "^10.0.0",
     "csv-stream": "^0.2.0",
-    "fast-csv": "^4.3.6"
+    "fast-csv": "^4.3.6",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.6",
-    "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.54.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",

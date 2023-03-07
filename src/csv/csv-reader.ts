@@ -1,10 +1,10 @@
-import * as fs from "fs";
+import { createReadStream } from "fs";
 import csv, { ParserOptions } from "csv-stream";
 
 export class CsvReader {
-  createStream(filePath: fs.PathLike, config: ParserOptions): NodeJS.WritableStream {
+  createStream(filePath: string, config: ParserOptions): NodeJS.WritableStream {
     const csvStream = csv.createStream(config);
 
-    return fs.createReadStream(filePath).pipe(csvStream);
+    return createReadStream(filePath).pipe(csvStream);
   }
 }

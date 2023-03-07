@@ -1,9 +1,11 @@
 import { CsvFormatterStream } from "fast-csv";
 import { CsvReader } from "../csv/csv-reader";
-import { InvalidInputError } from "../errors/invalid-input.error";
+import { InvalidCsvError } from "../error/invalid-csv.error";
+import { InvalidJsonError } from "../error/invalid-json.error";
 import { CsvWriter } from "../csv/csv-writer";
 import { csvReaderOptions, csvWriterOptions } from "../csv/config/config";
 import { MatrixRotate } from "../matrix/matrix-rotate";
+import { RotateLeftStrategy } from "../matrix/strategy/rotate-left.strategy";
 
 interface InputRow {
   id: string;
@@ -22,10 +24,10 @@ export class CliHandler {
 
   constructor() {
     this.writeStream = new CsvWriter().createStream(csvWriterOptions);
-    this.rotator = new MatrixRotate();
+    this.rotator = new MatrixRotate(new RotateLeftStrategy());
   }
 
-  rotateTable(input: string, output: NodeJS.WritableStream = process.stdout) {
+  rotateTable(input: string, output: NodeJS.WritableStream = process.stdout): boolean {
     const readStream = new CsvReader().createStream(input, csvReaderOptions);
 
     this.writeStream.pipe(output);
@@ -36,17 +38,27 @@ export class CliHandler {
     return true;
   }
 
-  private onInputStreamData(data: Record<string, string>) {
+  private onInputStreamData(data: Record<string, string>): void {
     if (!("id" in data) || !("json" in data)) {
-      throw new InvalidInputError("Invalid input data " + JSON.stringify(data));
+      throw new InvalidCsvError("Invalid input data " + JSON.stringify(data));
     }
 
-    const result = this.rotator.rotate(JSON.parse(data.json));
+    try {
+      const parsedData = JSON.parse(data.json);
+      const result = this.rotator.rotate(parsedData);
 
-    this.writeStream.write({ id: data.id, json: JSON.stringify(result.rotated), is_valid: result.isValid });
+      this.writeStream.write({
+        id: data.id,
+        json: JSON.stringify(result.rotated).replaceAll(",", ", "),
+        is_valid: result.isValid,
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new InvalidJsonError(`Invalid json file provided - ${errorMessage}`);
+    }
   }
 
-  private onInputStreamEnd() {
+  private onInputStreamEnd(): void {
     this.writeStream.end();
   }
 }
