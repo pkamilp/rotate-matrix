@@ -4,7 +4,7 @@ import { InvalidCsvError } from "../error/invalid-csv.error";
 import { InvalidJsonError } from "../error/invalid-json.error";
 import { CsvWriter } from "../csv/csv-writer";
 import { csvReaderOptions, csvWriterOptions } from "../csv/config/config";
-import { MatrixRotate } from "../matrix/matrix-rotate";
+import { MatrixRotationUseCase } from "./matrix-rotation.use-case";
 import { RotateLeftStrategy } from "../matrix/strategy/rotate-left.strategy";
 
 interface InputRow {
@@ -19,12 +19,12 @@ interface OutputRow {
 }
 
 export class CliHandler {
-  private writeStream: CsvFormatterStream<InputRow, OutputRow>;
-  private rotator: MatrixRotate;
+  private readonly writeStream: CsvFormatterStream<InputRow, OutputRow>;
+  private readonly rotator: MatrixRotationUseCase;
 
   constructor() {
     this.writeStream = new CsvWriter().createStream(csvWriterOptions);
-    this.rotator = new MatrixRotate(new RotateLeftStrategy());
+    this.rotator = new MatrixRotationUseCase(new RotateLeftStrategy());
   }
 
   rotateTable(input: string, output: NodeJS.WritableStream = process.stdout): boolean {
@@ -54,7 +54,12 @@ export class CliHandler {
       });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      throw new InvalidJsonError(`Invalid json file provided - ${errorMessage}`);
+
+      if (error instanceof SyntaxError) {
+        throw new InvalidJsonError(`Invalid json file provided - ${errorMessage}`);
+      }
+
+      throw error;
     }
   }
 

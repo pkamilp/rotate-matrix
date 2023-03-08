@@ -16,7 +16,7 @@ export class SquareMatrix implements Matrix {
     this.data = chunk(rawNumbers, this.rowsNumber);
   }
 
-  static create(numbers: number[]) {
+  static create(numbers: number[]): SquareMatrix {
     if (numbers.length < 1 || !Number.isInteger(Math.sqrt(numbers.length))) {
       throw new InvalidMatrixInputError(`Cannot form square matrix from ${numbers.length} element array`);
     }

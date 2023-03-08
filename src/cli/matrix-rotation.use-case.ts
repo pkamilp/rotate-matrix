@@ -1,8 +1,8 @@
-import { RotateStrategy } from "./strategy/rotate.strategy";
-import { SquareMatrix } from "./square-matrix";
+import { RotateStrategy } from "../matrix/strategy/rotate.strategy";
+import { SquareMatrix } from "../matrix/square-matrix";
 import { InvalidMatrixInputError } from "../error/invalid-matrix-input.error";
 
-export class MatrixRotate {
+export class MatrixRotationUseCase {
   constructor(private readonly strategy: RotateStrategy) {}
 
   rotate(data: number[]): { rotated: number[]; isValid: boolean } {

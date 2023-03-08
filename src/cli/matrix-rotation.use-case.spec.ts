@@ -1,10 +1,10 @@
 import assert from "assert";
 import { randomInt } from "crypto";
-import { MatrixRotate } from "./matrix-rotate";
-import { RotateLeftStrategy } from "./strategy/rotate-left.strategy";
+import { MatrixRotationUseCase } from "./matrix-rotation.use-case";
+import { RotateLeftStrategy } from "../matrix/strategy/rotate-left.strategy";
 
-describe("MatrixRotate", () => {
-  const rotator = new MatrixRotate(new RotateLeftStrategy());
+describe("MatrixRotationUseCase", () => {
+  const rotator = new MatrixRotationUseCase(new RotateLeftStrategy());
 
   const randomArray = (length: number): number[] => {
     return Array(length).fill(randomInt(0, 10));
